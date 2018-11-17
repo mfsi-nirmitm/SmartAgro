@@ -1,0 +1,306 @@
+<div class="row" style="background-color:#f6f6f6 ;border-top: 1px solid #ced2d7">
+  <!-- left part -->
+  <div class="container" style="width: 74%">
+
+    <div class="row">
+      <div class="col-3 overview acitveJob">
+        <div class="row">
+          <div class=" number">{{jobOverview.activeJobs}}</div>
+          <div class="col content">
+            <div>Active</div>
+            <div>Jobs</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-3 left-gap overview  completedJob">
+        <div class="row">
+          <div class=" number">{{jobOverview.completedJobs}}</div>
+          <div class="col content">
+            <div>Completed</div>
+            <div>Jobs</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-3 left-gap overview pendingApproval">
+        <div class="row">
+          <div class=" number">{{jobOverview.pendingApprovals}}</div>
+          <div class="col content">
+            <div>Pending</div>
+            <div>Approvals</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-3 left-gap overview rightFirstTime">
+        <div class="row">
+          <div class=" number">{{jobOverview.rightFirstTimePercentage}}%</div>
+          <div class="col content">
+            <div>Right the</div>
+            <div>1st Time</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        <div class="card" style="margin-left: -15px">
+          <div class="card-header">
+            <b>Related Videos</b>
+          </div>
+          <div class="card-body" style="overflow: scroll;">
+            <app-youtube-list></app-youtube-list>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="card" style="margin-left: -15px">
+          <div class="card-header">
+            <b>Articles</b>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-7">
+        <div class="card" style="margin-left: -15px">
+          <div class="card-header">
+            <b>WORK STATUS</b> (Jobs created: 9/15/2018 - 9/21/2018)
+          </div>
+          <div class="card-body row">
+            <div class="col-6" style="padding: 25px">
+              <div class="chart-des">
+                <i class="checkmark fal fa-square" style="background-color: #2db2fc;color: #2db2fc;font-size: 11px"></i>
+                Administration
+                <span>11.7%</span>
+              </div>
+              <div class="chart-des">
+                <i class="checkmark fal fa-square" style="background-color: #8cc63e;color: #8cc63e;font-size: 11px"></i>
+                In-Progress
+                <span>47.3%</span>
+              </div>
+              <div class="chart-des">
+                <i class="checkmark fal fa-square" style="background-color: #fbaf3f;color: #fbaf3f;font-size: 11px"></i>
+                Pending Approval
+                <span>31.5%</span>
+              </div>
+              <div class="chart-des" style="border-bottom: none;">
+                <i class="checkmark fal fa-square" style="background-color: #ff0000;color: #ff0000;font-size: 11px"></i>
+                On Hold
+                <span>9.5%</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType"
+                [legend]=false [colors]="chartColors" [options]="options" (chartClick)="chartClicked($event)" style="margin-top: 3rem">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-5" style="padding-right: 31px">
+        <div class="card">
+          <div class="card-header">
+            <b>TARGET DELIVERY</b>
+          </div>
+          <div class="card-body">
+            <hr style="margin-left: 4rem;">
+            <div style="display: inline-flex;margin-left: 1rem;margin-right: 1rem;">
+              <span class="task-job" style="border-right: none;"><b>By Task</b></span>
+              <span class="task-job" style="border-left: none;background-color: #cccccc;color: gray;">By Job</span>
+            </div>
+            <hr>
+            <div style="display: block;text-align: -webkit-center;">
+              <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                [legend]="false" [chartType]="barChartType" [colors]="barChartColors">
+              </canvas>
+            </div>
+            <div class="row">
+              <div class="col-4" style="text-align: right">
+                <i class="checkmark fal fa-square" style="background-color: #8cc63e;color: #8cc63e;font-size: 11px"></i>
+                <span style="font-size: 13px;padding-left: 5px;">On Time</span>
+              </div>
+              <div class="col-3" style="max-width: 20%;">
+                <i class="checkmark fal fa-square" style="background-color: #ff0000;color: #ff0000;font-size: 11px"></i>
+                <span style="font-size: 13px;padding-left: 5px;">Late</span>
+              </div>
+              <div class="col-4">
+                <i class="checkmark fal fa-square" style="background-color: #cccccc;color: #cccccc;font-size: 11px"></i>
+                <span style="font-size: 13px;padding-left: 5px;">Fast Track</span>
+              </div>
+            </div>
+            <div style="text-align: center;margin-top: 2rem;font-size: 13px;">
+              <span style="color: gray">(9/15/2018 - 9/21/2018)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-left: -1px;margin-right: 14px;">
+      <div class="card-header">
+        <b>TOTAL ITEMS WORKED</b> (Task worked: 9/15/2018 - 9/21/2018)
+      </div>
+      <div class="card-body row">
+        <div class="worked-item">
+          <h6 class="total-content">Label Items Worked</h6>
+          <div class="row" style="margin-top: 30px">
+            <ngx-charts-bar-horizontal [view]="view" [scheme]="colorScheme1" [results]="multi1" [gradient]="false"
+              [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+              [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [tooltipDisabled]="true">
+            </ngx-charts-bar-horizontal>
+          </div>
+        </div>
+        <div class="worked-item" style="margin-left: 2.5%">
+          <h6 class="total-content">Packaging Items Worked</h6>
+          <div class="row" style="margin-top: 30px">
+            <ngx-charts-bar-horizontal [view]="view" [scheme]="colorScheme2" [results]="multi2" [gradient]="false"
+              [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+              [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [tooltipDisabled]="true">
+            </ngx-charts-bar-horizontal>
+          </div>
+        </div>
+        <div class="worked-item" style="margin-left: 2.5%">
+          <h6 class="total-content">Shipper Items Worked</h6>
+          <div class="row" style="margin-top: 30px">
+            <ngx-charts-bar-horizontal [view]="view" [scheme]="colorScheme3" [results]="multi3" [gradient]="false"
+              [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+              [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [tooltipDisabled]="true">
+            </ngx-charts-bar-horizontal>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card" style="width: 47.5%;height: 14rem;">
+        <div class="card-header">
+          <b style="font-size: 17px;">Right the 1st Time</b><span style="font-size: 13px;color: gray;"> (Task Worked:
+            9/15/2018 - 9/21/2018)</span>
+        </div>
+        <div class="card-body">
+          <div class="row" style="margin-top: 1.8rem;">
+            <div style="width: 20%;margin-left: 20px">
+              <span class="rightFirstInner1"><b>99.2%</b>
+              </span>
+              <span class="rightFirstInner2">
+                1st Time
+              </span>
+            </div>
+            <div style="margin-left: -25px;margin-top: -8px;">
+              <ngx-charts-bar-horizontal [view]="[300, 70]" [scheme]="colorScheme4" [results]="multi4" [gradient]="false"
+                [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [tooltipDisabled]="true">
+              </ngx-charts-bar-horizontal>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="width: 48%;margin-left: 17px;height: 14rem;">
+        <div class="card-header">
+          <b style="font-size: 17px;">Fit For Use</b> <span style="font-size: 13px;color: gray;"> (Task Worked:
+            9/15/2018 - 9/21/2018)</span>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div style="width: 40%">
+              <canvas baseChart [data]="doughnutChartData2" [labels]="doughnutChartLabels2" [chartType]="doughnutChartType"
+                [legend]=false [colors]="chartColors2" [options]="options">
+              </canvas>
+            </div>
+            <div style="width: 50%">
+              <div class="chart-des" style="font-size: 14px">
+                <i class="checkmark fal fa-square" style="background-color: #2db2fc;color: #2db2fc;font-size: 11px"></i>
+                Planned
+                <span>60</span>
+              </div>
+              <div class="chart-des">
+                <i class="checkmark fal fa-square" style="background-color: #cccccc;color: #cccccc;font-size: 11px"></i>
+                Unplanned
+                <span>18</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-left: -1px;margin-right: 14px;">
+      <div class="card-header">
+        <b>Errors</b> (Task worked: 9/15/2018 - 9/21/2018)
+      </div>
+      <div class="card-body row">
+        <div style="display: contents">
+          <b>Errors to Beam (0.02%)</b>
+          <ngx-charts-bar-horizontal [view]="[100, 50]" [scheme]="{domain: ['#ff0000']}" [results]="[{'name': '','value': '5'}]"
+            [gradient]="false" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [tooltipDisabled]="true"
+            style="margin-left: -44px;margin-top: -10px;">
+          </ngx-charts-bar-horizontal>
+        </div>
+        <div style="display: contents">
+          <b style="margin-left: 4rem">Errors to Printer (0%)</b>
+          <ngx-charts-bar-horizontal [view]="[100, 50]" [scheme]="{domain: ['#ccc']}" [results]="[{'name': '','value': '1'}]"
+            [gradient]="false" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [tooltipDisabled]="true"
+            style="margin-left: -44px;margin-top: -10px;">
+          </ngx-charts-bar-horizontal>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- right part -->
+  <div style="background:#192c42;width: 26%;color: white">
+    <div class="right-heading">
+      SPENDINGS
+    </div>
+    <div style="padding: 9px 42px 0px 32px;">
+      <div style="padding: 12px;background: #576575">
+        <div style="font-size: 14px">MARKETING AND PROCUREMENT 2018</div>
+        <div style="font-size: 25px;font-weight: 400;">$ 100,000</div>
+      </div>
+
+      <div class="row above-right-graph">
+        <div class="col-5 offset-1">
+          <i class="checkmark fal fa-square" style="background-color: #6a2875;color: #6a2875;font-size: 12px"></i>
+          Marketing
+        </div>
+        <div class="col-6" style="margin-left: -15px;">
+          <i class="checkmark fal fa-square" style="background-color: #8cc63e;color: #8cc63e;font-size: 12px"></i>
+          Procurement
+        </div>
+      </div>
+
+      <div class="right-graph-section">
+        <div class="by-project-graph">
+          By Projects
+          <canvas baseChart [datasets]="barChartData2" [labels]="barChartLabels2" [legend]="false" [chartType]="barChartType2"
+            [colors]="barChartColors2" [options]="barChartOptions">
+          </canvas>
+        </div>
+        <div class="by-project-graph">
+          By Type
+          <canvas baseChart [datasets]="barChartData3" [labels]="barChartLabels2" [legend]="false" [chartType]="barChartType2"
+            [colors]="barChartColors2" [options]="barChartOptions">
+          </canvas>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem">
+        <span style="font-size: 17px;font-weight: 400;">NEW ITEMS</span>
+        <span style="color: gray;font-size: 14px">(Last 6 months)</span>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
+        <ngx-charts-bar-horizontal [view]="view" [scheme]="colorScheme1" [results]="multi5" [gradient]="false" [xAxis]="showXAxis"
+          [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [tooltipDisabled]="true">
+        </ngx-charts-bar-horizontal>
+      </div>
+    </div>
+  </div>
+</div>

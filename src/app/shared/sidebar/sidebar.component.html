@@ -1,0 +1,40 @@
+<nav id="sidebar">
+    <div class="sidebar-header">
+        <img class="" src="../../../assets/img/logo/logo.png" style="background: inherit">
+    </div>
+    <div class="sidebar-content">
+        <ul class="list-unstyled" style="text-align: center;margin-top: 20px;">
+            <li>
+                <a [routerLink]="['../smartagro/dashboard']" aria-expanded="false" (click)="onLinkClick('dashboard')" routerLinkActive="menu-active"
+                    [routerLinkActiveOptions]="{exact:true}" style="padding-top: 6px">
+                    <i class="far fa-calendar-alt" style="width: 74%;"></i>
+                    <span class="sidebar-content-heading">DASHBOARD</span>
+                </a>
+            </li>
+            <hr class="sidebar-line">
+            <li>
+                <a [routerLink]="['../smartagro/spend']" aria-expanded="false" (click)="onLinkClick('spend')" routerLinkActive="menu-active"
+                    [routerLinkActiveOptions]="{exact:true}" style="padding-top: 6px">
+                    <i class="far fa-calendar-alt" style="width: 74%;"></i>
+                    <span class="sidebar-content-heading">SPEND</span>
+                </a>
+            </li>
+            <hr class="sidebar-line">
+            <li>
+                <a [routerLink]="['../smartagro/orders']" (click)="onLinkClick('Orders')" routerLinkActive="menu-active"
+                [routerLinkActiveOptions]="{exact:true}" aria-expanded="false" style="padding-top: 6px">
+                    <i class="far fa-calendar-alt" style="width: 74%;"></i>
+                    <span class="sidebar-content-heading">ORDERS</span>
+                </a>
+            </li>
+            <hr class="sidebar-line">
+            <li>
+                <a [routerLink]="['../smartagro/reports']" aria-expanded="false" routerLinkActive="menu-active"
+                    [routerLinkActiveOptions]="{exact:true}" style="padding-top: 6px">
+                    <i class="far fa-calendar-alt" style="width: 74%;"></i>
+                    <span class="sidebar-content-heading">SAVED REPORTS</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

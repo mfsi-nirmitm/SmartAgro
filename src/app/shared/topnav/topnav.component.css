@@ -1,0 +1,37 @@
+.navbar {
+    position: inherit;
+    height: 70px;
+    /* padding: 35px 30px 10px 30px; */
+    border: none;
+    border-radius: 0;
+    margin-left: -20px;
+    -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 0px 0px !important;
+}
+
+.bean-style {
+    font-size: 19px;
+    padding-left: 2rem;
+    color: #666666;
+}
+
+.dropdown {
+    border: 1px solid #ced4da;
+    height: 30px;
+}
+
+.angle-down{
+    padding-left: 12rem;
+    margin-top: -1.5rem;
+    color: gray;
+}
+
+.right-side{
+    background: #192c42;
+    margin-top: -21px;
+    margin-bottom: -21px;
+    text-align: right;
+    padding-top: 20px;
+    border-bottom: 1px solid #ced2d7;
+}
