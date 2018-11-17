@@ -25,6 +25,7 @@ export const API_ENDPOINTS = {
 
   // Pre/Post Authentication
   AUTHENTICATION_ENDPOINT: `${API_BASE}/api/auth/signin`,
+  SIGNUP_AUTHENTICATION_ENDPOINT: `${API_BASE}/api/auth/signup`,
   AUTH_USER_ENDPOINT: `${API_BASE}/user/data`,
   LOGOUT_ENDPOINT: `${API_BASE}/user/logout`,
   FORGET_PASSWORD_ENDPOINT: `${API_BASE}/user/requestpasswordchange/`,

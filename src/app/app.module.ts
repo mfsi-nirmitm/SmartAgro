@@ -22,6 +22,7 @@ import { AuthGuard } from './shared/guards';
 import { JobsService } from './service/jobs.service';
 import { WorkStatusService } from './service/work-status.service';
 import { DeliveryService } from './service/delivery.service';
+import { SignUpModule } from './signup/signup.module';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { DeliveryService } from './service/delivery.service';
     FormsModule,
     HttpModule,
     LoginModule,
+    SignUpModule,
     ModulesModule,
     SpinnyModule,
     ToastrModule.forRoot({

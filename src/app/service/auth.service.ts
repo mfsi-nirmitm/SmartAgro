@@ -16,6 +16,7 @@ import { HttpUtil } from '../util/http.util';
 import { ExceptionRegistry } from '../constants/exception-registry.constant';
 import { SecureHttp } from '../shared/secure-http';
 import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
+import { SignUpModel } from '../model/signup.model';
 
 declare var NProgress: any;
 
@@ -40,7 +41,7 @@ export class AuthService {
         const url = `${API_ENDPOINTS.AUTHENTICATION_ENDPOINT}`;
         // NProgress.start();
         return this.http
-            .post(url,loginRequest)
+            .post(url, loginRequest)
             .map((response: Response) => HttpUtil.extractData<any>(response))
             .catch((err: any, observable: Observable<any>) => {
                 return HttpUtil.transformErrorResponse(err, {
@@ -50,6 +51,24 @@ export class AuthService {
                 // NProgress.done();
             });
     }
+
+    public signup(signupRequest: SignUpModel): Observable<LoginResponse> {
+      if (!signupRequest) {
+          return;
+      }
+      const url = `${API_ENDPOINTS.SIGNUP_AUTHENTICATION_ENDPOINT}`;
+      // NProgress.start();
+      return this.http
+          .post(url, signupRequest)
+          .map((response: Response) => HttpUtil.extractData<any>(response))
+          .catch((err: any, observable: Observable<any>) => {
+              return HttpUtil.transformErrorResponse(err, {
+                  401: ExceptionRegistry.UNAUTH_ACC_DENIED
+              });
+          }).finally(() => {
+              // NProgress.done();
+          });
+  }
 
     public passwordReset(username: any): Observable<any> {
         // NProgress.start();
