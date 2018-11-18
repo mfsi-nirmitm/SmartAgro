@@ -10,6 +10,8 @@ import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { GridModule } from "../../shared/grid/grid.module";
 import { SharedModule } from "../../shared/shared.module";
 import { LoggedInGuard } from "../../shared/guards/logged-in.guard";
+import { CropDataService } from "../../service/crop-data.service";
+import { SearchService } from "../../service/search.service";
 
 @NgModule({
     imports: [
@@ -24,7 +26,7 @@ import { LoggedInGuard } from "../../shared/guards/logged-in.guard";
         ChartsModule,
         NgxChartsModule,
     ],
-    providers: [LoggedInGuard],
+    providers: [LoggedInGuard,CropDataService,SearchService],
     declarations: [DashboardComponent,WorkStatusComponent],
     
     exports: [DashboardComponent],

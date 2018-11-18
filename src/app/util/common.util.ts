@@ -44,7 +44,11 @@ export class CommonUtil {
         return CommonUtil.formatLocalDate(d);
     }
 
-    public static  getDateStringFromNgbDateStruct(date: NgbDateStruct): string {
+    /**
+     * Returns date string in MM/DD/YYYY format
+     * @param date
+     */
+    public static  getDateStringFromNgbDateStruct_MMDDYYYY(date: NgbDateStruct): string {
         let d:string;
         if (date) {
             d = date.month+'/'+date.day+'/'+date.year;
@@ -53,6 +57,21 @@ export class CommonUtil {
             return null;
         }
     }
+
+      /**
+     * Returns date string in YY/MM/DD format
+     * @param date
+     */
+    public static  getDateStringFromNgbDateStruct_YYMMDD(date: NgbDateStruct): string {
+        let d:string;
+        if (date) {
+            d = date.month+'/'+date.day+'/'+ date.year;
+            return d;
+        } else {
+            return null;
+        }
+    }
+
 
     public static getDateFromString(d: string): Date {
         if (d && d !== '') {
@@ -171,10 +190,6 @@ export class CommonUtil {
     public static getCurrentDisplayName(): string {
         const user = StorageUtil.getUser();
         return user ? user['displayName'] : null;
-    }
-    public static getIfAccessMyTime() {
-        const user = StorageUtil.getUser();
-        return user ? user['accessMyTime'] : null;
     }
 
     public static getPriorDaysEditable(): number {

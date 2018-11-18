@@ -3,12 +3,11 @@ import { FormsModule } from "@angular/forms";
 import { NgbDatepickerModule, NgbTimepickerModule, NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { RouterModule } from "@angular/router";
 import { NgModule } from "@angular/core";
-import { OrdersComponent } from "./orders.component";
-import { OrdersDetailsComponent } from "./orders-detail/orders-detail.component";
 import { ExtraFunctionsService } from "../../service/extra-functions.service";
 import { LoggedInGuard } from "../../shared/guards/logged-in.guard";
 import { GridModule } from "../../shared/grid/grid.module";
 import { SharedModule } from "../../shared/shared.module";
+import { PredictionComponent } from "./prediction.component";
 
 @NgModule({
     imports: [
@@ -22,10 +21,10 @@ import { SharedModule } from "../../shared/shared.module";
         NgbModule.forRoot(),
     ],
     providers: [ExtraFunctionsService, LoggedInGuard],
-    declarations: [OrdersComponent,OrdersDetailsComponent],
+    declarations: [PredictionComponent],
     
-    exports: [OrdersComponent],
+    exports: [PredictionComponent],
     entryComponents: []
 })
 
-export class OrdersModule { }
+export class PredictionModule{ }

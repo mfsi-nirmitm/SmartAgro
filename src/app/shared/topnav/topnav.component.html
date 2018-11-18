@@ -1,33 +1,36 @@
 <nav class="navbar">
-  <div class="row" style="width: 100%;">
-    <div class="bean-style" style="width: 15%;margin-right:10px">
-      BEAN SUNTORY
-    </div>
-    <div style="width: 20%;margin-right:50px">
-      <div class="form-control-static">
-        <div class="input-group">
-          <input type="text" class="form-control" [(ngModel)]="selectedBrand" (ngModelChange)="onSelectedBrand($event)" [ngbTypeahead]="brandSearch"
-            placeholder="Start typing Brand Name..." [resultTemplate]="rt" [inputFormatter]="formatter" />
-
-          <div class="input-group-addon" (click)="clearBrand()">
-            <span aria-hidden="true">
-              <i class="fal fa-times"></i>
-            </span>
+    <div class="row">
+      <div class="col-4">
+        <div class="form-control-static">
+          <!-- <div class="input-group">
+            <input type="text" class="form-control" [ngbTypeahead]="filteredAllCrops" placeholder="Start typing Crop Name..."
+              [(ngModel)]="selectedCrop" (ngModelChange)="onSelectedCrop()" [editable]="false" #cropInput=ngbTypeahead
+              [ngbTypeahead]="cropSearch" [inputFormatter]="formatter" [resultTemplate]="rt" (focus)="onFocus($event)"
+              style="border-right:0px">
+            <div class="input-group-addon" (click)="clearCrop()">
+              <span aria-hidden="true">
+                <i class="fal fa-times"></i>
+              </span>
+            </div>
+            <ng-template #rt let-r="result" let-t="term">
+              {{r.cropname}}
+            </ng-template>
+          </div> -->
+        </div>
+      </div>
+      <div class="col-4 ">
+        <!-- <app-daterange ></app-daterange> -->
+      </div>
+      <div class="col-4 right-side ">
+  
+        <div ngbDropdown class="d-inline-block">
+          <span class="angle-down" id="dropdownBasic1" ngbDropdownToggle>{{userDisplayName}}</span>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="dropdown-item" (click)="logout()" style="padding-left:15px">
+              <i class="fas fa-power-off"></i>
+              &nbsp;Logout</button>
           </div>
-
-          <ng-template #rt let-r="result" let-t="term">
-            {{ r.name}}
-          </ng-template>
         </div>
       </div>
     </div>
-    <div style="width: 36% ;margin-right: 6px;">
-      <app-daterange></app-daterange>
-    </div>
-    <div class="right-side" style="width: 23%">
-      <span style="font-size: 14px;color: #666666;padding-left: 8px;">Todd Price</span>
-      <span class="angle-down dropdown-toggle" data-toggle="dropdown" style="padding: 0px 0px 0px 5px !important;"></span>
-      <ul class="dropdown-menu dropdown-menu-right"></ul>
-    </div>
-  </div>
-</nav>
+  </nav>

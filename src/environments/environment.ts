@@ -3,7 +3,8 @@ export const environment = {
   production: false,
    //apiBaseUrl: window.location.protocol+"//"+window.location.hostname+"/data",
   //apiBaseUrl: 'https://myreports.dev.phototype.com/data',
-  apiBaseUrl: 'http://10.10.22.161:9400',
+  //apiBaseUrl: 'http://10.10.22.161:9400',
+  apiBaseUrl: 'http://localhost:9400',
   version: '1.0.0',
 };
 

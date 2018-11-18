@@ -8,7 +8,9 @@ export class YoutubeListComponent {
 
   links: any[] = [
     '9eaEhtnwtRo',
-    '2Y77KEYuw_g'
+    '2Y77KEYuw_g',
+    '9eaEhtnwtRo',
+    '9eaEhtnwtRo',
   ];
 
   constructor() {

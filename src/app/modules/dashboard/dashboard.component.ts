@@ -2,10 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WorkStatusComponent } from './work-status/work-status.component';
 import { MODAL_ATTRIBUTES } from '../../constants/application-setting.constant';
-import { JobsService } from '../../service/jobs.service';
 import { SpinnyService } from '../../shared/spinny/spinny.service';
-import { Observable, Subscription } from 'rxjs';
+import {  Subscription } from 'rxjs';
 import { Overview } from '../../model/overview.model';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { SearchService } from '../../service/search.service';
+import { CropDataService } from '../../service/crop-data.service';
+import { ToastComponent } from '../../shared/toast/toast.component';
+import { StorageUtil } from '../../util/storage.util';
+import { SensorData } from '../../model/sensor-data.model';
+import { Crop } from '../../model/crop.model';
+import { Seed } from '../../model/seed.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,103 +22,9 @@ import { Overview } from '../../model/overview.model';
 })
 export class DashboardComponent implements OnInit {
 
-  private _apiCallSubscriptions: Subscription[] = [];
-  public jobOverview: Overview;
-
-  constructor(private _modalService: NgbModal,
-    private _spinnyService: SpinnyService,
-    private _jobService: JobsService) { }
-
-  ngOnInit() {
-    this.jobOverview = {
-      'activeJobs': 38,
-      'completedJobs': 6,
-      'pendingApprovals': 12,
-      'rightFirstTimePercentage': 92.2
-    }
-  }
-
-  //for doughnut chart1
-  public doughnutChartLabels: string[] = ['Administration', 'In-Progress', 'Pending Approval', 'On Hold'];
-  public doughnutChartData =
-    [11.7, 47.3, 31.5, 9.5];
-  // [
-  //   {
-  //     type: "doughnut",
-  //     indexLabelPlacement: "outside",
-  //     radius: "90%",
-  //     innerRadius: "75%",
-  //     data: [11.7, 47.3, 31.5, 9.5],
-  //     dataPoints: [
-  //       { y: 11.7, label: "Administration" },
-  //       { y: 47.3, label: "In-Progress" },
-  //       { y: 31.5, label: "Pending Approval" },
-  //       { y: 9.5, label: "On Hold" },
-  //     ]
-  //   }
-  // ]
-  public doughnutChartType: string = 'doughnut';
-  public chartColors: Array<any> = [{
-    backgroundColor: ['#2db2fc', '#8cc63e', '#fbaf3f', '#ff0000']
-  }];
-  public options = {
-    responsive: true
-  };
-
-  //for doughnut chart2
-  public doughnutChartLabels2: string[] = ['Planned', 'Unplanned'];
-  public doughnutChartData2 =
-    [60, 18];
-  public chartColors2: Array<any> = [{
-    backgroundColor: ['#2db2fc', '#cccccc']
-  }];
-
-
-  //for bar chart
-  public barChartOptions: any = {
-    scales: {
-      xAxes: [{
-        gridLines: {
-          drawOnChartArea: false
-        }
-      }],
-      yAxes: [{
-        display: false,
-        gridLines: {
-          drawOnChartArea: false
-        }
-      }]
-    }
-  };
-  public barChartLabels: string[] = ['On Time', 'Late'];
-  public barChartType: string = 'bar';
-  public barChartData: any[] = [
-    { data: [29, 9], label: 'Series A' },
-    { data: [6, 6], label: 'Series B' }
-  ];
-  public barChartColors: Array<any> = [{
-    backgroundColor: ['#8cc63e', '#ff0000', '#cccccc']
-  }];
-
-
-  //for bar chart2
-  public barChartLabels2: string[] = ['Marketing', 'Procurement'];
-  public barChartType2: string = 'bar';
-  public barChartColors2: Array<any> = [{
-    backgroundColor: ['#7030a0', '#8cc63e']
-  }];
-  public barChartData2: any[] = [
-    { data: [60, 40], label: 'Series A' },
-    { data: [0, 0], label: 'Series B' },
-  ];
-
-  //for bar chart3
-  public barChartData3: any[] = [
-    { data: [40, 20], label: 'Series A' },
-    { data: [0, 0], label: 'Series B' },
-  ];
-
-  //for horizontal bar chart 1
+  crop: Crop;
+  seed: Seed;
+  sensordata:SensorData;
   showXAxis = false;
   showYAxis = true;
   showLegend = false;
@@ -118,127 +32,213 @@ export class DashboardComponent implements OnInit {
   xAxisLabel = '';
   showYAxisLabel = true;
   yAxisLabel = '';
-  view: any[] = [300, 130];
-  colorScheme1 = {
-    domain: ['#00b0f0', '#00b0f0', '#00b0f0', '#00b0f0']
-  };
-  multi1: any[] = [
-    {
-      "name": "Output",
-      "value": 80
-    },
-    {
-      "name": "Retouching",
-      "value": 12
-    },
-    {
-      "name": "Assembly",
-      "value": 64
-    },
-    {
-      "name": "Production Art",
-      "value": 75
-    },
-  ];
 
-  //for horizontal bar chart 2
-  colorScheme2 = {
-    domain: ['#8cc63e', '#8cc63e', '#8cc63e', '#8cc63e']
-  };
-  multi2: any[] = [
+  nvalue = [
     {
-      "name": "Output",
-      "value": 62
+      'name': '',
+      'value': 0
     },
-    {
-      "name": "Retouching",
-      "value": 14
-    },
-    {
-      "name": "Assembly",
-      "value": 78
-    },
-    {
-      "name": "Production Art",
-      "value": 65
-    },
-  ];
+  ]
 
-  //for horizontal bar chart 3
-  colorScheme3 = {
-    domain: ['#7030a0', '#7030a0', '#7030a0', '#7030a0']
-  };
-  multi3: any[] = [
+  pvalue = [
     {
-      "name": "Output",
-      "value": 82
+      'name': '',
+      'value': 0
     },
-    {
-      "name": "Retouching",
-      "value": 20
-    },
-    {
-      "name": "Assembly",
-      "value": 59
-    },
-    {
-      "name": "Production Art",
-      "value": 67
-    },
-  ];
+  ]
 
-  //for horizontal bar chart 4
-  colorScheme4 = {
-    domain: ['#7030a0', '#8cc63e']
-  };
-  multi4: any[] = [
+  kvalue = [
     {
-      "name": "Procurement",
-      "value": 200
+      'name': '',
+      'value': 0
     },
+  ]
+
+  humidity = [
     {
-      "name": "Marketing",
-      "value": 210
+      'name': '',
+      'value': 0
+    },
+  ]
+
+  relativehumidity = [
+    {
+      'name': '',
+      'value': 0
+    },
+  ]
+
+  soilmoisture = [
+    {
+      'name': '',
+      'value': 0
+    },
+  ]
+
+    tempreture = [
+      {
+        'name': '',
+        'value': 0
+      },
+    ]
+  sub1: Subscription;
+
+  constructor(private _router: Router,private cropDataService:CropDataService, private _toastr: ToastrService, private _spinnyService: SpinnyService, public _searchService: SearchService) { }
+
+  ngOnInit() {
+      this.getCropSeedDetails();
+      this.getCurrentCropDetails();
+  }
+
+  getCropSeedDetails() {
+    this._spinnyService.start();
+    this.cropDataService.getCropDetails().subscribe(
+      (response) => {
+        if (response['success']) {
+          this._spinnyService.stop();
+          if (response['data'] && response['data']['crop']) {
+            this.crop = response['data']['crop'];
+          }
+          if (response['data'] && response['data']['seed']) {
+            this.seed = response['data']['seed'];
+          }
+        } else {
+          this._spinnyService.stop();
+          this._toastr.show('Could not find ideal details for your current crop', 'Error', {
+            toastComponent: ToastComponent,
+            toastClass: 'error-toast-class',
+            // timeOut: 2000,
+            disableTimeOut: true,
+            positionClass: 'toast-top-center'
+          });
+        }
+      }, (error) => {
+        this._spinnyService.stop();
+        if (JSON.parse(error['_body'])['error'] && JSON.parse(error['_body'])['error'] == 'Unauthorized') {
+          StorageUtil.clearAll();
+          this._router.navigate(['login']);
+        } else {
+          this._toastr.show('Error Occurred', 'Error', {
+            toastComponent: ToastComponent,
+            toastClass: 'error-toast-class',
+            // timeOut: 2000,
+            disableTimeOut: true,
+            positionClass: 'toast-top-center'
+          });
+        }
+      });
+  }
+
+  getCurrentCropDetails() {
+    this._spinnyService.start();
+    this.cropDataService.getCurrentCropDetails().subscribe(
+      (response) => {
+        if (response['success']) {
+          this._spinnyService.stop();
+          if (response['data']) {
+            let data:SensorData[]= response['data']
+            this.sensordata = data[0];
+            this.initializeData();
+          }
+        } else {
+          this._spinnyService.stop();
+          this._toastr.show('Could not find current crop details', 'Error', {
+            toastComponent: ToastComponent,
+            toastClass: 'error-toast-class',
+            // timeOut: 2000,
+            disableTimeOut: true,
+            positionClass: 'toast-top-center'
+          });
+        }
+      }, (error) => {
+        this._spinnyService.stop();
+        if (JSON.parse(error['_body'])['error'] && JSON.parse(error['_body'])['error'] == 'Unauthorized') {
+          StorageUtil.clearAll();
+          this._router.navigate(['login']);
+        } else {
+          this._toastr.show('Error Occurred', 'Error', {
+            toastComponent: ToastComponent,
+            toastClass: 'error-toast-class',
+            // timeOut: 2000,
+            disableTimeOut: true,
+            positionClass: 'toast-top-center'
+          });
+        }
+      });
+  }
+
+  initializeData() {
+    this.nvalue = [];
+    this.pvalue = [];
+    this.kvalue = [];
+    this.tempreture=[];
+    this.humidity=[];
+    this.relativehumidity=[];
+    this.soilmoisture=[];
+    if (this.sensordata.nvalue) {
+      this.nvalue.push(
+        {
+          'name': '',
+          'value': Math.round(parseFloat(this.sensordata.nvalue))
+        },
+      )
     }
-  ];
 
-  //for horizontal bar chart 5
-  multi5: any[] = [
-    {
-      "name": "August",
-      "value": 112
-    },
-    {
-      "name": "July",
-      "value": 55
-    },
-    {
-      "name": "June",
-      "value": 65
-    },
-    {
-      "name": "May",
-      "value": 45
-    },
-    {
-      "name": "April",
-      "value": 28
-    },
-    {
-      "name": "March",
-      "value": 10
-    },
-  ];
+    if (this.sensordata.pvalue) {
+      this.pvalue.push(
+        {
+          'name': '',
+          'value': Math.round(parseFloat(this.sensordata.pvalue))
+        }
+      )
+    }
+
+    if (this.sensordata.kvalue) {
+      this.kvalue.push(
+        {
+          'name': '',
+          'value': Math.round(parseFloat(this.sensordata.kvalue))
+        }
+      )
+    }
 
 
-  // events
-  public chartClicked(e: any): void {
-    console.log(e);
-    const modalRef = this._modalService.open(WorkStatusComponent, MODAL_ATTRIBUTES);
+    if (this.sensordata.humidity) {
+      this.humidity.push(
+        {
+          'name': '',
+          'value': Math.round(parseFloat(this.sensordata.humidity))
+        }
+      )
+    }
+
+    if (this.sensordata.relativehumidity) {
+      this.relativehumidity.push(
+        {
+          'name': '',
+          'value': Math.round(parseFloat(this.sensordata.relativehumidity))
+        }
+      )
+    }
+
+    if (this.sensordata.soilmoisture) {
+      this.soilmoisture.push(
+        {
+          'name': '',
+          'value': Math.round(parseFloat(this.sensordata.soilmoisture))
+        }
+      )
+    }
+
+    if (this.sensordata.tempreture) {
+      this.tempreture.push(
+        {
+          'name': '',
+          'value': Math.round(parseFloat(this.sensordata.tempreture))
+        }
+      )
+    }
 
   }
 
-  public chartHovered(e: any): void {
-    console.log(e);
-  }
 }

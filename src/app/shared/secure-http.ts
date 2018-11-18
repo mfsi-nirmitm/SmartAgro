@@ -3,13 +3,13 @@ import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { StorageUtil } from '../util/storage.util';
-// import { ToastrService } from 'ngx-toastr';
-// import { ToastComponent } from './toast/toast.component';
+import { ToastrService } from 'ngx-toastr';
+import { ToastComponent } from './toast/toast.component';
 
 @Injectable()
 export class SecureHttp {
   constructor(private http: Http, private router: Router,
-    // private _toastr: ToastrService 
+    private _toastr: ToastrService 
     ) { }
 
   get(url) {
@@ -38,12 +38,12 @@ export class SecureHttp {
       // this._toastr.clear();
       this.router.navigate(['login']);
     } else {
-      // this._toastr.show("Error Occured !!", 'Error', {
-      //   toastComponent: ToastComponent,
-      //   toastClass: 'error-toast-class',
-      //   disableTimeOut: true,
-      //   positionClass: 'toast-top-center'
-      // });
+      this._toastr.show("Error Occured !!", 'Error', {
+        toastComponent: ToastComponent,
+        toastClass: 'error-toast-class',
+        disableTimeOut: true,
+        positionClass: 'toast-top-center'
+      });
       return Observable.throw(err);
     }
   }
@@ -52,7 +52,7 @@ export class SecureHttp {
    
     const OPTIONS = new RequestOptions({
       headers: new Headers({
-        'Authorization':  StorageUtil.getSessionKey(),
+        'Authorization':  'Bearer:'+StorageUtil.getSessionKey(),
         'content-type': 'application/json'      })
     });
     return OPTIONS;

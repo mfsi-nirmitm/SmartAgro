@@ -57,7 +57,6 @@ export class UserService {
           let userJson: any = res['data'];
           StorageUtil.setUser(userJson);
           StorageUtil.setSessionKey(userJson['authenticationToken']);
-          StorageUtil.setApplicationId(userJson['applicationId']);
           this.currentUser = userJson;
           this.loggedIn = true;
         }

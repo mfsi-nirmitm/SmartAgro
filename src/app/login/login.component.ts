@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 // import { ToastrService } from 'ngx-toastr';
 import { AuthStatus } from '.';
 import { Subscription } from 'rxjs';
@@ -8,11 +8,11 @@ import { LoginRequest } from '../model/login-request.model';
 import { StorageUtil } from '../util/storage.util';
 import { AuthService } from '../service/auth.service';
 import { SpinnyService } from '../shared/spinny/spinny.service';
-import { Exception, ExceptionRegistry } from '../constants/exception-registry.constant';
 import { ToastComponent } from '../shared/toast/toast.component';
-import { LoginResponse } from '../model/login-response.model';
-import { CommonUtil } from '../util/common.util';
 import { ToastrService } from 'ngx-toastr';
+import { SearchService } from '../service/search.service';
+import { User } from '../model/user.model';
+import { UserService } from '../service/user.service';
 
 
 @Component({
@@ -20,10 +20,9 @@ import { ToastrService } from 'ngx-toastr';
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.less']
 })
+
 export class LoginComponent implements OnInit {
 
-    ssoURL: SafeResourceUrl;
-    ssURLStr;
     login = {
         username: '',
         password: '',
@@ -35,16 +34,12 @@ export class LoginComponent implements OnInit {
     public _authenticatedUserSubs: Subscription;
     public alerts: any = [];
 
-    constructor(private _router: Router,
+    constructor(private _router: Router,private route:ActivatedRoute,
         private _toastr: ToastrService,
-        public sanitizer: DomSanitizer,
         private _authService: AuthService,
-        private spinnyService: SpinnyService
-    ) {
-        // this.ssURLStr = checkMode.sso+"/assets/sso/receiver.html";
-        this.ssoURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.ssURLStr);
-
-    }
+        private _spinnyService: SpinnyService,
+        private _userService:UserService,
+    ){  }
 
     ngOnInit() {
 
@@ -69,56 +64,37 @@ export class LoginComponent implements OnInit {
   }
 
   doAuthentication(loginRequest: LoginRequest): void {
-      this.spinnyService.start();
-      this._authenticatedUserSubs = this._authService.authenticate(loginRequest).subscribe(
-          (data: any) => {
-              this.spinnyService.stop();
-              this._authStatus = data.statusCode ? AuthStatus.SUCCESS : AuthStatus.FAILED;
-              if (this._authStatus === AuthStatus.SUCCESS) {
-                  const userData = data['data'];
-                  if (!userData) {
-                      StorageUtil.clearAll();
-                      this._toastr.show(' You do not have permission to access any customer !! ', 'Error!', {
-                          toastComponent: ToastComponent,
-                          toastClass: 'error-toast-class',
-                          disableTimeOut: true,
-                          positionClass: 'toast-top-center'
-                      });
-                  } else {
-
-                      StorageUtil.setSessionKey(data['data']['accessToken']);
-                      this._router.navigateByUrl('/smartagro/dashboard');
-                      this._toastr.clear();
-                  }
-
-
-
-              } else {
-                  this._toastr.show('Error Occurred: ' + data.error.error, 'Error!', {
-                      toastComponent: ToastComponent,
-                      toastClass: 'error-toast-class',
-                      // timeOut: 2000,
-                      disableTimeOut: true,
-                      positionClass: 'toast-top-center'
-                  });
-              }
-          },
-          (ex: Exception) => {
-              var body = JSON.parse(ex['_body']);
-              this.spinnyService.stop();
-              this._toastr.show('Error Occurred:' + body.message, 'Error!', {
-                  toastComponent: ToastComponent,
-                  toastClass: 'error-toast-class',
-                  // timeOut: 2000,
-                  disableTimeOut: true,
-                  positionClass: 'toast-top-center'
-              });
-              if (ex === ExceptionRegistry.UNAUTH_ACC_DENIED) {
-                  this._authStatus = AuthStatus.FAILED;
-                  console.log({ type: 'ERROR', message: ex.message });
-              }
-          }
-      );
+      this._spinnyService.start();
+      this._authenticatedUserSubs = this._authService.authenticate(loginRequest)
+      .subscribe((result) => {
+        if (result['success']) {
+            this._spinnyService.stop();
+            let data: any = result['data'];
+            StorageUtil.setSessionKey(data['accessToken']);
+            StorageUtil.setUser(data['user']);
+            this._userService.currentUser= User.fromJsonFlat(StorageUtil.getUser())
+            this._router.navigateByUrl("/smartagro/dashboard");
+            this._toastr.clear();
+        } else {
+          this._spinnyService.stop();
+          this._toastr.show('Wrong credentials', 'Error', {
+            toastComponent: ToastComponent,
+            toastClass: 'error-toast-class',
+            // timeOut: 2000,
+            disableTimeOut: true,
+            positionClass: 'toast-top-center'
+          });
+        }
+      },(error)=>{
+        this._spinnyService.stop();
+        this._toastr.show('Wrong credentials', 'Error', {
+          toastComponent: ToastComponent,
+          toastClass: 'error-toast-class',
+          // timeOut: 2000,
+          disableTimeOut: true,
+          positionClass: 'toast-top-center'
+        });
+      });
   }
 
   rememberMe() {

@@ -5,7 +5,6 @@ export const DashboardRoutes: Route[] = [
     {
         path: 'dashboard',
         component: DashboardComponent,
-        //canActivate: [LoggedInGuard],
         children: [
         ]
     }

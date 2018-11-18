@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router, RouterEvent } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -19,10 +19,9 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { UserService } from './service/user.service';
 import { ModulesModule } from './modules/modules.module';
 import { AuthGuard } from './shared/guards';
-import { JobsService } from './service/jobs.service';
-import { WorkStatusService } from './service/work-status.service';
-import { DeliveryService } from './service/delivery.service';
 import { SignUpModule } from './signup/signup.module';
+import { ToastComponent } from './shared/toast/toast.component';
+import { SearchService } from './service/search.service';
 
 @NgModule({
   declarations: [
@@ -52,11 +51,12 @@ import { SignUpModule } from './signup/signup.module';
     AuthGuard,
     UserService,
     ToastrService,
-    JobsService,
     SpinnyService,
-    WorkStatusService,
-    DeliveryService
+    SearchService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents:[ToastComponent]
 })
-export class AppModule { }
+export class AppModule { 
+
+}

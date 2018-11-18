@@ -1,3 +1,0 @@
-<select class="form-control" name="brand-list" id="brand-list" [(ngModel)]="selectedBrand" (ngModelChange)="changed($event)">
-  <option [ngValue]="brand.id" *ngFor="let brand of brands">{{brand.name}}</option>
-</select>

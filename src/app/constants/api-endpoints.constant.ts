@@ -13,6 +13,8 @@ import { environment } from '../../environments/environment';
 export const API_BASE = environment.apiBaseUrl;
 
 
+export const USER_ID = null;
+
 /**
  *  The API endpoints object
  */

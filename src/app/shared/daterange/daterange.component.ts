@@ -5,8 +5,9 @@ import {
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 import * as _ from "lodash";
-import { NgbDate } from '../../../../node_modules/@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
 import { CommonUtil } from '../../util/common.util';
+import { SearchService } from '../../service/search.service';
 const equals = (one: NgbDateStruct, two: NgbDateStruct) =>
   one && two && two.year === one.year && two.month === one.month && two.day === one.day;
 
@@ -28,11 +29,18 @@ const after = (one: NgbDateStruct, two: NgbDateStruct) =>
   },
   styleUrls: ['daterange.component.css']
 })
-export class DateRangeComponent {
-
+export class DateRangeComponent implements OnInit {
+  
   @Input() daterange: any;
   @Output() valueChange = new EventEmitter();
 
+  @Input()
+  disabled = false;
+
+  ngOnInit() {
+    // this.onFixedDateRange("Last 1 Year", 365); to show 1 year data on Login
+    this.setDateStrings(true);
+  }
 
   show = false;
   hoveredDate: NgbDateStruct;
@@ -44,14 +52,14 @@ export class DateRangeComponent {
   navigation = 'arrow';
   showWeekNumbers = false;
   disableApply = false;
-  fixedDateRangeTitle:string='';
-  fromDateString:string='';
-  toDateString:string='';
-  dateString:string='';
+  fixedDateRangeTitle: string = '';
+  fromDateString: string = '';
+  toDateString: string = '';
+  dateString: string = '';
 
   elementRef;
 
-  constructor(calendar: NgbCalendar, myElement: ElementRef) {
+  constructor(calendar: NgbCalendar, myElement: ElementRef, private _searchService: SearchService) {
     this.elementRef = myElement;
     this.reset();
   }
@@ -72,9 +80,11 @@ export class DateRangeComponent {
       this.toDate = null;
       this.fromDate = date;
     }
-    this.dateString =  null;
-    this.fixedDateRangeTitle=null;
+    this.dateString = null;
+    this.fixedDateRangeTitle = null;
     this.setDateStrings();
+
+
   }
 
   isHovered = date => this.fromDate && !this.toDate && this.hoveredDate && after(date, this.fromDate) && before(date, this.hoveredDate);
@@ -115,9 +125,9 @@ export class DateRangeComponent {
       this.fromDate = this.daterange.fromDate;
       this.toDate = this.daterange.toDate;
     }
-    this.fixedDateRangeTitle=null;
-    this.dateString =  null;
-    this.setDateStrings(); 
+    this.fixedDateRangeTitle = null;
+    this.dateString = null;
+    this.setDateStrings();
   }
 
   clear() {
@@ -129,10 +139,17 @@ export class DateRangeComponent {
     this.fromDate = null;
     this.toDate = null;
     this.fromDateString = null;
-    this.toDateString = null; 
-    this.fixedDateRangeTitle=null;
-    this.dateString =  null;
+    this.toDateString = null;
+    this.fixedDateRangeTitle = null;
+    this.dateString = null;
     this.valueChange.emit(this.daterange);
+    this.setDateStrings(true);
+    this.toggle();
+
+    this._searchService.fromDate = CommonUtil.getDateStringFromNgbDateStruct_YYMMDD(this.fromDate);
+    this._searchService.endDate = CommonUtil.getDateStringFromNgbDateStruct_YYMMDD(this.toDate);
+    this._searchService.changeEvent.next();
+
   }
 
   apply() {
@@ -150,33 +167,38 @@ export class DateRangeComponent {
     this.daterange.fromDate = this.fromDate;
     this.daterange.toDate = this.toDate;
     this.valueChange.emit(this.daterange);
-    this.fixedDateRangeTitle=null;
-    this.setDateStrings();
+    this.setDateStrings(true);
     this.toggle();
+    this._searchService.fromDate = CommonUtil.getDateStringFromNgbDateStruct_YYMMDD(this.fromDate);
+    this._searchService.endDate = CommonUtil.getDateStringFromNgbDateStruct_YYMMDD(this.toDate);
+    this._searchService.changeEvent.next();
+
   }
 
-  onFixedDateRange(fd:string,days:number) {
+  onFixedDateRange(fd: string, days: number) {
     let to = new Date();
     let from = new Date(to.getTime() - (days * 24 * 60 * 60 * 1000));
-    let day =from.getDate();
-    let month=from.getMonth()+1;
-    let year=from.getFullYear();
-    
+    // let day = from.getDate();
+    // let month = from.getMonth() + 1;
+    // let year = from.getFullYear();
+
     this.toDate = { day: to.getDate(), month: to.getMonth() + 1, year: to.getFullYear() };
     this.fromDate = { day: from.getDate(), month: from.getMonth() + 1, year: from.getFullYear() };
-    this.fixedDateRangeTitle=fd;
+    this.fixedDateRangeTitle = fd;
     this.setDateStrings();
     return null;
   }
 
-  setDateStrings(){
-    this.fromDateString = CommonUtil.getDateStringFromNgbDateStruct(this.fromDate);
-    this.toDateString = CommonUtil.getDateStringFromNgbDateStruct(this.toDate); 
-    this.dateString = "";
-    if(this.fixedDateRangeTitle && this.fromDateString && this.toDateString)
-      this.dateString = this.fixedDateRangeTitle + " : "+ this.fromDateString + " - " + this.toDateString;
-    else if(!this.fixedDateRangeTitle && this.fromDateString && this.toDateString){
-      this.dateString=this.fromDateString + " - " + this.toDateString;
+  setDateStrings(setDateStr?) {
+    this.fromDateString = CommonUtil.getDateStringFromNgbDateStruct_MMDDYYYY(this.fromDate);
+    this.toDateString = CommonUtil.getDateStringFromNgbDateStruct_MMDDYYYY(this.toDate);
+    if (setDateStr) {
+      this.dateString = "";
+      if (this.fixedDateRangeTitle && this.fromDateString && this.toDateString)
+        this.dateString = this.fixedDateRangeTitle + " : " + this.fromDateString + " - " + this.toDateString;
+      else if (!this.fixedDateRangeTitle && this.fromDateString && this.toDateString) {
+        this.dateString = this.fromDateString + " - " + this.toDateString;
+      }
     }
   }
 }

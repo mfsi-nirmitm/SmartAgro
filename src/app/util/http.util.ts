@@ -16,7 +16,6 @@ export abstract class HttpUtil {
     */
     public static extractData<T>(res: Response): T {
         let body: any;
-        debugger
         try {
             body = res.json();
         } catch (ex) {

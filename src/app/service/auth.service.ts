@@ -42,13 +42,9 @@ export class AuthService {
         // NProgress.start();
         return this.http
             .post(url, loginRequest)
-            .map((response: Response) => HttpUtil.extractData<any>(response))
-            .catch((err: any, observable: Observable<any>) => {
-                return HttpUtil.transformErrorResponse(err, {
-                    401: ExceptionRegistry.UNAUTH_ACC_DENIED
-                });
-            }).finally(() => {
-                // NProgress.done();
+            .map((res: Response) => res.json())
+            .catch((error) => {
+                return Observable.of(false);
             });
     }
 

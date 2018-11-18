@@ -9,10 +9,9 @@ import { LoggedInGuard } from '../shared/guards/logged-in.guard';
 import { TopNavModule } from '../shared/topnav/topnav.modules';
 import { ExtraFunctionsService } from '../service/extra-functions.service';
 import { SidebarComponent } from '../shared/sidebar/sidebar.component';
-import { OrdersModule } from './orders/orders.module';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { ModulesComponent } from './modules.component';
+import { PredictionModule } from './prediction/prediction.module';
 
 @NgModule({
     imports: [
@@ -21,7 +20,7 @@ import { ModulesComponent } from './modules.component';
         NgbModule,
         TopNavModule,
         SharedModule,
-        OrdersModule,
+        PredictionModule,
         DashboardModule
     ],
     providers: [ExtraFunctionsService, LoggedInGuard],
