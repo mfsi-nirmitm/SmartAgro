@@ -15,12 +15,23 @@
         </div>
       </div>
       <div class="home-row">
-        <div class="home-row-inner" style="min-height: 600px;text-align: center">
-            <div class="col-8" *ngFor="let crop of cropNames">
-                <span>{{crop}}</span>
+        <div class="home-row-inner" style="min-height: 600px;text-align: left !important;font-size: 16px; ">
+            <div class="card">
+                <div class="card-header">
+                   <strong> The Ideal Crops based on Your Soil Health Card Id </strong>
+                </div>
+              </div>
+            <div class="col-10" *ngFor="let crop of cropNames;  let i = index" style="margin-left:50px;background-color:#97dcb0">
+
+                <div class="card">
+                  <div class="card-header">
+                     <strong> {{ (i+1) + ".  "+crop}} </strong>
+                  </div>
+                </div>
+                <!-- <h4></h4> -->
             </div>
             <div *ngIf="cropNames.length === 0" class="no-data">
-                <img src="../../../assets/img/no-data.jpg" />
+                <img src="../../../assets/img/NoDataFound.png" />
             </div> 
         </div>
       </div>

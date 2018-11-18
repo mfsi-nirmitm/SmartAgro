@@ -1,7 +1,7 @@
 export class Seed {
     seedid: number;
     cropid: number;
-    seedname:number;
+    seedname:string;
     nvalueMin:string;
     nvalueMax:string;
     pvalueMin:string;
