@@ -45,7 +45,7 @@ export class PredictionComponent implements OnInit {
           }
         } else {
           this._spinnyService.stop();
-          this._toastr.show('Could not find current crop details', 'Error', {
+          this._toastr.show('Could not find any crop details for entered soil health card id', 'Error', {
             toastComponent: ToastComponent,
             toastClass: 'error-toast-class',
             // timeOut: 2000,
